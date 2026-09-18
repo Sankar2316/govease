@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GovEase — Your Rights, One Search Away</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --saffron: #FF9933;
+  --saffron-soft: #ffe0b2;
+  --green: #138808;
+  --green-soft: #b9f6ca;
+  --navy: #0d1b4a;
+  --navy-mid: #162252;
+  --navy-light: #1e3068;
+
+  --bg: #080f24;
+  --surface: #0e1633;
+  --surface-2: #13203f;
+  --surface-hover: #182748;
+  --glass: rgba(14,22,51,0.65);
+  --glass-border: rgba(255,255,255,0.06);
+  --glass-border-hover: rgba(255,255,255,0.12);
+
+  --text: #e8ecf4;
+  --text-2: #9ba4b8;
+  --text-3: #5e6880;
+
+  --radius: 14px;
+  --radius-sm: 10px;
+  --font-body: 'DM Sans', sans-serif;
+  --font-display: 'Space Grotesk', sans-serif;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;}
+
+/* ===== BG GRAIN + GLOW ===== */
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 600px 500px at 80% 5%, rgba(255,153,51,0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 500px 500px at 15% 90%, rgba(19,136,8,0.05) 0%, transparent 70%),
+    radial-gradient(ellipse 300px 300px at 50% 50%, rgba(30,48,104,0.08) 0%, transparent 70%);
+}
+
+/* Tricolor top line */
+.tri-line{height:3px;display:flex;position:relative;z-index:10;}
+.tri-line span{flex:1;}
+.tri-line .a{background:var(--saffron);}
+.tri-line .b{background:#fff;}
+.tri-line .c{background:var(--green);}
+
+/* ===== HEADER ===== */
+header{
+  position:relative;z-index:2;
+  padding:52px 24px 48px;
+  text-align:center;
+}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:600;color:var(--text-3);
+  text-transform:uppercase;letter-spacing:0.1em;
+  margin-bottom:24px;
+}
+.eyebrow::before,.eyebrow::after{
+  content:'';width:24px;height:1px;background:var(--text-3);opacity:0.4;
+}
+
+header h1{
+  font-family:var(--font-display);
+  font-size:48px;font-weight:700;
+  letter-spacing:-0.04em;
+  line-height:1.1;
+  margin-bottom:16px;
+}
+header h1 .gov{color:var(--saffron);}
+header h1 .ease{color:var(--text);}
+
+header .subtitle{
+  font-size:17px;line-height:1.65;
+  color:var(--text-2);
+  max-width:500px;margin:0 auto 28px;
+}
+
+/* Stat pills in header */
+.header-stats{
+  display:inline-flex;gap:6px;flex-wrap:wrap;justify-content:center;
+}
+.h-pill{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:6px 14px;border-radius:100px;
+  font-size:12px;font-weight:600;
+  background:var(--surface);
+  border:1px solid var(--glass-border);
+  color:var(--text-2);
+}
+.h-pill i{font-size:10px;}
+.h-pill.sf i{color:var(--saffron);}
+.h-pill.gr i{color:var(--green-soft);}
+.h-pill.nv i{color:#7c8cc8;}
+
+/* ===== CONTAINER ===== */
+.wrap{max-width:700px;margin:0 auto;padding:0 20px 60px;position:relative;z-index:2;}
+
+/* ===== CARD ===== */
+.card{
+  background:var(--surface);
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius);
+  padding:30px;
+  margin-bottom:16px;
+  transition:border-color 0.25s;
+}
+.card:hover{border-color:var(--glass-border-hover);}
+
+.section-label{
+  font-family:var(--font-display);
+  font-size:13px;font-weight:600;
+  color:var(--text-3);
+  text-transform:uppercase;letter-spacing:0.08em;
+  margin-bottom:16px;
+  display:flex;align-items:center;gap:8px;
+}
+.section-label .bar{width:3px;height:14px;border-radius:2px;background:var(--saffron);}
+
+/* ===== FORM ===== */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.field{display:flex;flex-direction:column;gap:5px;}
+.field.full{grid-column:1/-1;}
+.field label{
+  font-size:11px;font-weight:600;color:var(--text-3);
+  letter-spacing:0.05em;text-transform:uppercase;
+}
+.field select,.field input{
+  padding:11px 14px;
+  background:rgba(255,255,255,0.04);
+  border:1.5px solid var(--glass-border);
+  border-radius:var(--radius-sm);
+  font-size:14px;font-family:var(--font-body);
+  color:var(--text);outline:none;
+  transition:all 0.2s;
+}
+.field select:focus,.field input:focus{
+  border-color:var(--saffron);
+  background:rgba(255,153,51,0.04);
+  box-shadow:0 0 0 3px rgba(255,153,51,0.1);
+}
+.field input::placeholder{color:var(--text-3);}
+.field select option{background:var(--surface);color:var(--text);}
+
+/* ===== BUTTON ===== */
+.btn{
+  width:100%;padding:15px;margin-top:20px;
+  background:var(--saffron);color:#fff;
+  border:none;border-radius:var(--radius-sm);
+  font-size:15px;font-weight:700;font-family:var(--font-display);
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:all 0.2s;
+  letter-spacing:0.01em;
+}
+.btn:hover{
+  background:#e8871d;
+  transform:translateY(-1px);
+  box-shadow:0 6px 24px rgba(255,153,51,0.2);
+}
+.btn:active{transform:translateY(0);}
+.btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
+.btn .spin{
+  width:16px;height:16px;
+  border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;
+  border-radius:50%;animation:sp .6s linear infinite;display:none;
+}
+@keyframes sp{to{transform:rotate(360deg);}}
+
+/* ===== RESULTS ===== */
+.results{display:none;}
+.results.on{display:block;}
+
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
+.metric{
+  background:var(--surface);border:1px solid var(--glass-border);
+  border-radius:var(--radius-sm);padding:16px;text-align:center;
+}
+.metric-val{
+  font-family:var(--font-display);font-size:26px;font-weight:700;color:var(--text);
+}
+.metric:first-child .metric-val{color:var(--saffron);}
+.metric:last-child .metric-val{color:var(--green-soft);}
+.metric-lbl{font-size:10px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.06em;margin-top:2px;}
+
+/* AI box */
+.ai-box{
+  background:var(--surface);border:1px solid var(--glass-border);
+  border-radius:var(--radius);padding:20px 22px;margin-bottom:14px;
+  border-left:3px solid var(--saffron);
+}
+.ai-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.ai-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--green-soft);
+  box-shadow:0 0 6px rgba(19,136,8,0.4);
+}
+.ai-row span{font-size:12px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.06em;}
+.ai-row .cnt{margin-left:auto;font-family:var(--font-display);font-size:12px;font-weight:700;color:var(--saffron);}
+.ai-text{font-size:14px;line-height:1.7;color:var(--text-2);}
+
+/* ===== SCHEME CARD ===== */
+.s-card{
+  background:var(--surface);
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius);
+  padding:22px 24px;
+  margin-bottom:12px;
+  transition:all 0.25s;
+}
+.s-card:hover{
+  border-color:rgba(255,153,51,0.2);
+  background:var(--surface-2);
+  transform:translateY(-2px);
+  box-shadow:0 8px 28px rgba(0,0,0,0.25);
+}
+.s-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:8px;}
+.s-name{font-family:var(--font-display);font-size:15px;font-weight:600;color:var(--text);line-height:1.35;}
+.s-tag{
+  padding:3px 10px;border-radius:100px;
+  font-size:10px;font-weight:700;
+  letter-spacing:0.03em;white-space:nowrap;flex-shrink:0;
+}
+.t-edu{background:rgba(96,165,250,0.1);color:#93bbfd;border:1px solid rgba(96,165,250,0.12);}
+.t-hlt{background:rgba(34,197,94,0.1);color:#6ee7a0;border:1px solid rgba(34,197,94,0.12);}
+.t-agr{background:rgba(255,153,51,0.1);color:var(--saffron-soft);border:1px solid rgba(255,153,51,0.12);}
+.t-emp{background:rgba(167,139,250,0.1);color:#c4b5fd;border:1px solid rgba(167,139,250,0.12);}
+.t-hou{background:rgba(244,114,182,0.1);color:#f9a8d4;border:1px solid rgba(244,114,182,0.12);}
+.t-fin{background:rgba(45,212,191,0.1);color:#5eead4;border:1px solid rgba(45,212,191,0.12);}
+.t-wom{background:rgba(244,114,182,0.1);color:#f9a8d4;border:1px solid rgba(244,114,182,0.12);}
+.t-sc{background:rgba(192,132,252,0.1);color:#d8b4fe;border:1px solid rgba(192,132,252,0.12);}
+.t-sen{background:rgba(251,146,60,0.1);color:#fdba74;border:1px solid rgba(251,146,60,0.12);}
+.t-rur{background:rgba(163,230,53,0.1);color:#bef264;border:1px solid rgba(163,230,53,0.12);}
+
+.s-desc{font-size:13px;color:var(--text-3);line-height:1.5;margin-bottom:10px;}
+
+.s-benefit{
+  background:rgba(19,136,8,0.05);
+  border:1px solid rgba(34,197,94,0.08);
+  border-radius:var(--radius-sm);
+  padding:11px 14px;font-size:13px;
+  color:var(--green-soft);line-height:1.55;
+  margin-bottom:12px;
+}
+.s-benefit strong{color:#4ade80;}
+
+.s-docs{margin-bottom:12px;}
+.s-docs summary{font-size:12px;font-weight:600;color:var(--text-3);cursor:pointer;padding:2px 0;}
+.s-docs summary:hover{color:var(--text-2);}
+.s-docs ul{list-style:none;display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}
+.s-docs li{
+  padding:4px 10px;border-radius:100px;font-size:11px;
+  color:var(--text-2);background:rgba(255,255,255,0.04);
+  border:1px solid var(--glass-border);
+}
+
+.s-apply{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:9px 18px;background:var(--saffron);color:#fff;
+  text-decoration:none;border-radius:var(--radius-sm);
+  font-size:13px;font-weight:700;font-family:var(--font-display);
+  transition:all 0.2s;
+}
+.s-apply:hover{background:#e8871d;transform:translateY(-1px);box-shadow:0 4px 14px rgba(255,153,51,0.2);}
+
+/* ===== FOOTER ===== */
+footer{text-align:center;padding:32px 20px;position:relative;z-index:2;}
+.foot-line{width:48px;height:2px;background:linear-gradient(90deg,var(--saffron),var(--green));margin:0 auto 16px;border-radius:2px;}
+footer p{font-size:12px;color:var(--text-3);line-height:1.8;}
+footer strong{color:var(--text-2);}
+footer a{color:var(--saffron);text-decoration:none;font-weight:600;}
+footer a:hover{text-decoration:underline;}
+.tech-row{
+  display:flex;align-items:center;justify-content:center;
+  gap:6px;margin-top:8px;flex-wrap:wrap;
+}
+.tech-chip{
+  font-size:10px;font-weight:600;color:var(--text-3);
+  padding:3px 10px;border-radius:100px;
+  background:rgba(255,255,255,0.03);border:1px solid var(--glass-border);
+  letter-spacing:0.03em;
+}
+
+/* ===== LOADING ===== */
+.skel{display:none;}.skel.on{display:block;}
+.sk{background:var(--surface);border:1px solid var(--glass-border);border-radius:var(--radius);padding:22px;margin-bottom:10px;}
+.sb{height:12px;background:linear-gradient(90deg,rgba(255,255,255,0.02) 25%,rgba(255,255,255,0.05) 50%,rgba(255,255,255,0.02) 75%);background-size:200% 100%;animation:sh 1.5s infinite;border-radius:6px;margin-bottom:10px;}
+.sb.a{width:75%;}.sb.b{width:55%;}.sb.c{width:35%;height:8px;}
+@keyframes sh{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+
+/* RESPONSIVE */
+@media(max-width:640px){
+  .grid{grid-template-columns:1fr;}
+  header h1{font-size:34px;}
+  .wrap{padding:0 14px 40px;}
+  .card{padding:22px;}
+  .metrics{grid-template-columns:1fr;}
+  .header-stats{gap:4px;}
+}
+</style>
+</head>
+<body>
+
+<div class="tri-line"><span class="a"></span><span class="b"></span><span class="c"></span></div>
+
+<header>
+  <div class="eyebrow">an open-source initiative</div>
+  <h1><span class="gov">Gov</span><span class="ease">Ease</span></h1>
+  <p class="subtitle">Hundreds of government schemes exist for people like you — scholarships, pensions, housing loans, crop insurance. Most go unclaimed. We fix that.</p>
+  <div class="header-stats">
+    <span class="h-pill sf"><i class="fa-solid fa-database"></i> 47 schemes indexed</span>
+    <span class="h-pill gr"><i class="fa-solid fa-bolt"></i> AI-powered matching</span>
+    <span class="h-pill nv"><i class="fa-solid fa-lock"></i> Zero data stored</span>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="card">
+    <div class="section-label"><span class="bar"></span>Your Profile</div>
+    <div class="grid">
+      <div class="field">
+        <label>Age</label>
+        <input type="number" id="age" placeholder="e.g. 25" min="1" max="120">
+      </div>
+      <div class="field">
+        <label>Gender</label>
+        <select id="gender">
+          <option value="">Select</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Annual Family Income</label>
+        <select id="income">
+          <option value="">Select range</option>
+          <option value="50000">Below ₹1 Lakh</option>
+          <option value="150000">₹1 – 2.5 Lakh</option>
+          <option value="400000">₹2.5 – 5 Lakh</option>
+          <option value="650000">₹5 – 8 Lakh</option>
+          <option value="900000">₹8 – 10 Lakh</option>
+          <option value="1500000">₹10 – 25 Lakh</option>
+          <option value="3000000">Above ₹25 Lakh</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>State</label>
+        <select id="state">
+          <option value="">Select state</option>
+          <option value="Andhra Pradesh">Andhra Pradesh</option>
+          <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+          <option value="Assam">Assam</option>
+          <option value="Bihar">Bihar</option>
+          <option value="Chhattisgarh">Chhattisgarh</option>
+          <option value="Goa">Goa</option>
+          <option value="Gujarat">Gujarat</option>
+          <option value="Haryana">Haryana</option>
+          <option value="Himachal Pradesh">Himachal Pradesh</option>
+          <option value="Jharkhand">Jharkhand</option>
+          <option value="Karnataka">Karnataka</option>
+          <option value="Kerala">Kerala</option>
+          <option value="Madhya Pradesh">Madhya Pradesh</option>
+          <option value="Maharashtra">Maharashtra</option>
+          <option value="Manipur">Manipur</option>
+          <option value="Meghalaya">Meghalaya</option>
+          <option value="Mizoram">Mizoram</option>
+          <option value="Nagaland">Nagaland</option>
+          <option value="Odisha">Odisha</option>
+          <option value="Punjab">Punjab</option>
+          <option value="Rajasthan">Rajasthan</option>
+          <option value="Sikkim">Sikkim</option>
+          <option value="Tamil Nadu">Tamil Nadu</option>
+          <option value="Telangana">Telangana</option>
+          <option value="Tripura">Tripura</option>
+          <option value="Uttar Pradesh">Uttar Pradesh</option>
+          <option value="Uttarakhand">Uttarakhand</option>
+          <option value="West Bengal">West Bengal</option>
+          <option value="Delhi">Delhi (NCT)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Category</label>
+        <select id="category">
+          <option value="">Select</option>
+          <option value="General">General</option>
+          <option value="OBC">OBC</option>
+          <option value="SC">SC</option>
+          <option value="ST">ST</option>
+          <option value="Minority">Minority</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Occupation</label>
+        <select id="occupation">
+          <option value="">Select</option>
+          <option value="Student">Student</option>
+          <option value="Farmer">Farmer</option>
+          <option value="Salaried">Salaried Employee</option>
+          <option value="Self-employed">Self-Employed / Business</option>
+          <option value="Unemployed">Unemployed / Job Seeker</option>
+          <option value="Homemaker">Homemaker</option>
+          <option value="Senior Citizen">Retired / Senior Citizen</option>
+          <option value="Daily Wage Worker">Daily Wage Worker</option>
+        </select>
+      </div>
+      <div class="field full">
+        <label>Education</label>
+        <select id="education">
+          <option value="">Select</option>
+          <option value="Below Class 8">Below Class 8</option>
+          <option value="Class 8-10">Class 8 – 10</option>
+          <option value="Class 12">Class 11 – 12</option>
+          <option value="Undergraduate">Undergraduate</option>
+          <option value="Postgraduate">Postgraduate</option>
+          <option value="ITI/Diploma">ITI / Diploma</option>
+          <option value="Professional">Professional (Engg / Medical / Law)</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn" id="findBtn" onclick="go()">
+      <span class="spin" id="sp"></span>
+      <i class="fa-solid fa-arrow-right" id="ico"></i>
+      <span id="btxt">Find my schemes</span>
+    </button>
+  </div>
+
+  <div class="skel" id="skel">
+    <div class="sk"><div class="sb a"></div><div class="sb b"></div><div class="sb c"></div></div>
+    <div class="sk"><div class="sb b"></div><div class="sb a"></div><div class="sb c"></div></div>
+  </div>
+
+  <div class="results" id="res"></div>
+
+  <footer>
+    <div class="foot-line"></div>
+    <p>Built by <strong>Sankar</strong> · Team CloudNova<br>
+    <a href="https://github.com/Sankar2316/govease" target="_blank"><i class="fa-brands fa-github"></i> GitHub</a> · First Commit Hackathon 2026 · WeMakeDevs × AWS</p>
+    <div class="tech-row">
+      <span class="tech-chip">Bedrock</span>
+      <span class="tech-chip">DynamoDB</span>
+      <span class="tech-chip">Lambda</span>
+      <span class="tech-chip">API Gateway</span>
+      <span class="tech-chip">S3</span>
+    </div>
+  </footer>
+</div>
+
+<script>
+const API="https://cgumjj2r9d.execute-api.us-east-1.amazonaws.com/v1/match";
+
+function tc(c){
+  if(c.includes("Education"))return"t-edu";if(c.includes("Health"))return"t-hlt";
+  if(c.includes("Agriculture"))return"t-agr";if(c.includes("Employment"))return"t-emp";
+  if(c.includes("Housing"))return"t-hou";if(c.includes("Finance"))return"t-fin";
+  if(c.includes("Women"))return"t-wom";if(c.includes("SC")||c.includes("OBC")||c.includes("ST"))return"t-sc";
+  if(c.includes("Senior"))return"t-sen";if(c.includes("Rural"))return"t-rur";return"t-edu";
+}
+
+async function go(){
+  const a=document.getElementById("age").value,
+    g=document.getElementById("gender").value,
+    i=document.getElementById("income").value,
+    s=document.getElementById("state").value,
+    c=document.getElementById("category").value,
+    o=document.getElementById("occupation").value,
+    e=document.getElementById("education").value;
+  if(!a||!g||!i||!s){alert("Please fill Age, Gender, Income and State.");return;}
+
+  const btn=document.getElementById("findBtn"),sp=document.getElementById("sp"),
+    ico=document.getElementById("ico"),bt=document.getElementById("btxt");
+  btn.disabled=true;sp.style.display="block";ico.style.display="none";bt.textContent="Matching...";
+  document.getElementById("skel").classList.add("on");
+  document.getElementById("res").classList.remove("on");
+
+  try{
+    const r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({user_profile:{age:+a,gender:g,annual_income:+i,state:s,category:c,occupation:o,education:e}})});
+    const raw=await r.json();const d=typeof raw.body==="string"?JSON.parse(raw.body):raw;
+    document.getElementById("skel").classList.remove("on");
+    render(d);
+  }catch(err){
+    document.getElementById("skel").classList.remove("on");
+    const el=document.getElementById("res");
+    el.innerHTML=`<div class="ai-box" style="border-left-color:#ef4444"><div class="ai-row"><span style="color:#fca5a5">Error</span></div><div class="ai-text" style="color:#fca5a5">${err.message}</div></div>`;
+    el.classList.add("on");
+  }finally{
+    btn.disabled=false;sp.style.display="none";ico.style.display="inline";bt.textContent="Find my schemes";
+  }
+}
+
+function render(d){
+  const el=document.getElementById("res"),schemes=d.schemes||[],
+    total=d.total_matched||schemes.length,all=d.all_schemes_count||47,
+    sum=d.ai_summary||`Found ${total} schemes for you.`;
+
+  let h=`
+  <div class="metrics">
+    <div class="metric"><div class="metric-val">${all}</div><div class="metric-lbl">Schemes Indexed</div></div>
+    <div class="metric"><div class="metric-val">${total}</div><div class="metric-lbl">Matched</div></div>
+    <div class="metric"><div class="metric-val">${schemes.length}</div><div class="metric-lbl">Top Results</div></div>
+  </div>
+  <div class="ai-box">
+    <div class="ai-row"><div class="ai-dot"></div><span>AI Summary</span><span class="cnt">${total} schemes</span></div>
+    <div class="ai-text">${sum}</div>
+  </div>`;
+
+  schemes.forEach(s=>{
+    const docs=(s.documents_required||[]).map(x=>`<li>${x}</li>`).join("");
+    h+=`<div class="s-card">
+      <div class="s-head"><div class="s-name">${s.name}</div><span class="s-tag ${tc(s.category)}">${s.category}</span></div>
+      <div class="s-desc">${s.description?(s.description.substring(0,200)+'…'):''}</div>
+      <div class="s-benefit"><strong>Benefits:</strong> ${s.benefits}</div>
+      ${docs?`<details class="s-docs"><summary>Documents required (${s.documents_required.length})</summary><ul>${docs}</ul></details>`:''}
+      ${s.apply_url?`<a href="${s.apply_url}" target="_blank" class="s-apply"><i class="fa-solid fa-arrow-up-right-from-square"></i> Apply</a>`:''}
+    </div>`;
+  });
+
+  el.innerHTML=h;el.classList.add("on");
+  el.scrollIntoView({behavior:"smooth",block:"start"});
+}
+</script>
+
+</body>
+</html>
